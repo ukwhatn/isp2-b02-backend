@@ -14,7 +14,13 @@ log:
 	docker compose logs -f
 
 revision:
-	 docker compose exec server /bin/bash -c "cd /db && alembic revision --autogenerate -m '${NAME}'"
+	docker compose exec server /bin/bash -c "cd /db && alembic revision --autogenerate -m '${NAME}'"
 
 migrate:
-	 docker compose exec server /bin/bash -c "cd /db && alembic upgrade head"
+	docker compose exec server /bin/bash -c "cd /db && alembic upgrade head"
+
+init:
+	cp envs/db.env.sample envs/db.env
+	cp envs/server.env.sample envs/server.env
+	make up
+	make migrate
