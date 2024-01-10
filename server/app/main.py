@@ -3,6 +3,9 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from starlette.requests import Request
+from starlette.routing import Match
+from starlette.types import Message
 
 from routers.api import main as api_main
 from util.env import get_env
@@ -10,7 +13,7 @@ from util.env import get_env
 # logger config
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-logger.setLevel(level=logging.INFO)
+logger.setLevel(level=logging.DEBUG)
 
 # get environment mode
 env_mode = get_env("ENV_MODE", "development")

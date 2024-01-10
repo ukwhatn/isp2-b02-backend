@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from . import session, actor, note
+from . import session, actor, note, activitypub
 
 # define router
 router = APIRouter()
@@ -17,4 +17,8 @@ router.include_router(
 router.include_router(
     note.router,
     prefix="/note"
+)
+router.include_router(
+    activitypub.router,
+    prefix="/activitypub"
 )

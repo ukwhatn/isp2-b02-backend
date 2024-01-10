@@ -2,7 +2,7 @@ version: "3"
 
 services:
   server:
-    container_name: server
+    container_name: isp2-b02-backend-server
     build:
       context: .
       dockerfile: dockerfiles/server/Dockerfile
@@ -11,7 +11,7 @@ services:
       - ./server/db:/db
     ports:
       - "127.0.0.1:58080:80"
-      - "192.168.101.121:58080:80"
+      #- "192.168.101.121:58080:80"
     env_file:
       - ./envs/server.env
       - ./envs/db.env
