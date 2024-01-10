@@ -1,0 +1,62 @@
+version: "3"
+
+services:
+  server:
+    container_name: server
+    build:
+      context: .
+      dockerfile: dockerfiles/server/Dockerfile
+    volumes:
+      - ./server/app:/app
+      - ./server/db:/db
+    ports:
+      - "127.0.0.1:8080:80"
+    env_file:
+      - ./envs/server.env
+      - ./envs/db.env
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  db:
+    image: postgres:15.4
+    env_file:
+      - ./envs/db.env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./server/db/init:/docker-entrypoint-initdb.d
+    restart: always
+    ports:
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+  redis:
+    image: redis:7.2.0
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: redis-cli ping
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+  rc:
+    image: rediscommander/redis-commander
+    environment:
+      REDIS_HOSTS: REDIS_HOSTS=local:redis:6379
+      TZ: JST-9
+    ports:
+      - "127.0.0.1:8081:8081"
+    depends_on:
+      - redis
+
+volumes:
+  pg_data:
+  redis_data:
