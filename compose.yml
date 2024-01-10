@@ -10,7 +10,8 @@ services:
       - ./server/app:/app
       - ./server/db:/db
     ports:
-      - "127.0.0.1:8080:80"
+      - "127.0.0.1:58080:80"
+      - "192.168.101.121:58080:80"
     env_file:
       - ./envs/server.env
       - ./envs/db.env
@@ -46,16 +47,6 @@ services:
       interval: 2s
       timeout: 5s
       retries: 30
-
-  rc:
-    image: rediscommander/redis-commander
-    environment:
-      REDIS_HOSTS: REDIS_HOSTS=local:redis:6379
-      TZ: JST-9
-    ports:
-      - "127.0.0.1:8081:8081"
-    depends_on:
-      - redis
 
 volumes:
   pg_data:
