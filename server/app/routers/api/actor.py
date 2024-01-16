@@ -5,6 +5,8 @@ from crud import SessionCrud
 from crud.schemas import ActorSessionSchema
 from db import schemas
 from db.crud import actor as actor_crud
+from db.models import Actor
+from db.schemas import ErrorResponse
 from db.session import get_db
 
 # define router
@@ -35,11 +37,13 @@ def create(
 @router.get("/", description="ログイン中Actor取得")
 async def get(
         request: Request,
+        response: Response,
         db: Session = Depends(get_db)
-) -> schemas.ActorPublic | None:
+) -> schemas.ErrorResponse | schemas.Actor | None:
     with SessionCrud() as session_crud:
         session: ActorSessionSchema = session_crud.get(request)
     if session is None:
-        return None
+        response.status_code = 401
+        return schemas.ErrorResponse(message="Not logged in")
 
     return actor_crud.get(db, session.actor_id)

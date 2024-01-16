@@ -7,6 +7,9 @@ up:
 down:
 	docker compose down
 
+reset:
+	docker compose down --volumes --remove-orphans
+
 ps:
 	docker compose ps
 
