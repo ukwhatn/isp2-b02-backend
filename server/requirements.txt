@@ -1,6 +1,7 @@
-fastapi==0.104.0
-uvicorn[standard]==0.23.2
+fastapi==0.108.0
+uvicorn[standard]==0.25.0
 redis==5.0.1
-sqlalchemy==2.0.22
-alembic==1.12.1
+sqlalchemy==2.0.25
+alembic==1.13.1
 psycopg2==2.9.9
+websockets==12.0
