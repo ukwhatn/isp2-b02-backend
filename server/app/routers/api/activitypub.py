@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 # ここを変更
-host = "127.0.0.1:58080:80"
+host = "127.0.0.1:58080"
 
 
 # /api/activitypub/users/{user_name} : get

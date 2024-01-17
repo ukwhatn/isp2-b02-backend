@@ -3,11 +3,10 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from starlette.requests import Request
-from starlette.routing import Match
-from starlette.types import Message
 
 from routers.api import main as api_main
+from routers.wellknown import main as wellknown_main
+from routers.nodeinfo import main as nodeinfo_main
 from util.env import get_env
 
 # logger config
@@ -49,4 +48,14 @@ app.mount("/static", StaticFiles(directory="/app/static"), name="static")
 app.include_router(
     api_main.router,
     prefix="/api"
+)
+
+app.include_router(
+    wellknown_main.router,
+    prefix="/.well-known"
+)
+
+app.include_router(
+    nodeinfo_main.router,
+    prefix="/nodeinfo"
 )
