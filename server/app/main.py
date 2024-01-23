@@ -5,7 +5,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from routers.api import main as api_main
-from routers.wellknown import main as wellknown_main
 from routers.activitypub import main as activitypub_main
 from util.env import get_env
 
