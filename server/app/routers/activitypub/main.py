@@ -6,6 +6,7 @@ from crud import SessionCrud
 from crud.schemas import ActorSessionSchema
 from db import schemas
 from db.crud import actor as actor_crud
+from db.crud import note as note_crud
 from db.session import get_db
 
 from fastapi import APIRouter
@@ -98,7 +99,9 @@ def actor_outbox(user_name: str, db: Session = Depends(get_db)):
     if user is None:
         return Response(status_code=404)
 
-    notes: list[schemas.NotePublic] = user.notes
+    notes: list[schemas.NotePublic] = note_crud.get_by_actor(db, user.id)
+
+    print(type(notes))
 
     data = {
         "@context": [
@@ -123,7 +126,7 @@ def actor_outbox(user_name: str, db: Session = Depends(get_db)):
         "id": "https://misskey.io/users/9bmype3osl/outbox?page=true",
         "partOf": "https://misskey.io/users/9bmype3osl/outbox",
         "type": "OrderedCollectionPage",
-        "totalItems": 2,
+        "totalItems": len(notes),
         "orderedItems": [
             {
                 "id": f"https://b02.isp2.ukwhatn.com/actor/{user.name}/activity",
