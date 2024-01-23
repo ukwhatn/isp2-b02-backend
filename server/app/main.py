@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 
 from routers.api import main as api_main
 from routers.wellknown import main as wellknown_main
-from routers.nodeinfo import main as nodeinfo_main
+from routers.activitypub import main as activitypub_main
 from util.env import get_env
 
 # logger config
@@ -51,11 +51,6 @@ app.include_router(
 )
 
 app.include_router(
-    wellknown_main.router,
-    prefix="/.well-known"
-)
-
-app.include_router(
-    nodeinfo_main.router,
-    prefix="/nodeinfo"
+    activitypub_main.router,
+    prefix="/"
 )
