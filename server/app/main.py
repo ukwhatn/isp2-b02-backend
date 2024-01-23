@@ -50,6 +50,5 @@ app.include_router(
 )
 
 app.include_router(
-    activitypub_main.router,
-    prefix="/"
+    activitypub_main.router
 )
