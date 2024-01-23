@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Request, Response, Depends
+from fastapi import APIRouter, Request, Depends
 from sqlalchemy.orm import Session
+import httpx
 
 from crud import SessionCrud
 from crud.schemas import ActorSessionSchema
@@ -30,6 +31,7 @@ def create(
         content=data.content
     )
     note = note_crud.create(db, note_create)
+
     return note
 
 

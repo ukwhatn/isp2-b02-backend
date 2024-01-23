@@ -90,3 +90,72 @@ def actor(user_name: str, db: Session = Depends(get_db)):
     }
 
     return Response(content=json.dumps(data), media_type="application/activity+json")
+
+
+@router.get("/actor/{user_name}/outbox")
+def actor_outbox(user_name: str, db: Session = Depends(get_db)):
+    user = actor_crud.get_by_name(db, user_name)
+    if user is None:
+        return Response(status_code=404)
+
+    notes: list[schemas.NotePublic] = user.notes
+
+    data = {
+        "@context": [
+            "https://www.w3.org/ns/activitystreams",
+            "https://w3id.org/security/v1",
+            {
+                "manuallyApprovesFollowers": "as:manuallyApprovesFollowers",
+                "sensitive": "as:sensitive",
+                "Hashtag": "as:Hashtag",
+                "quoteUrl": "as:quoteUrl",
+                "toot": "http://joinmastodon.org/ns#",
+                "Emoji": "toot:Emoji",
+                "featured": "toot:featured",
+                "discoverable": "toot:discoverable",
+                "schema": "http://schema.org#",
+                "PropertyValue": "schema:PropertyValue",
+                "value": "schema:value",
+                "isCat": "misskey:isCat",
+                "vcard": "http://www.w3.org/2006/vcard/ns#"
+            }
+        ],
+        "id": "https://misskey.io/users/9bmype3osl/outbox?page=true",
+        "partOf": "https://misskey.io/users/9bmype3osl/outbox",
+        "type": "OrderedCollectionPage",
+        "totalItems": 2,
+        "orderedItems": [
+            {
+                "id": f"https://b02.isp2.ukwhatn.com/actor/{user.name}/activity",
+                "actor": f"https://b02.isp2.ukwhatn.com/actor/{user.name}",
+                "type": "Create",
+                "published": note.created_at.isoformat(),
+                "object": {
+                    "id": f"https://b02.isp2.ukwhatn.com/actor/{user.name}/note/{note.id}",
+                    "type": "Note",
+                    "attributedTo": f"https://b02.isp2.ukwhatn.com/actor/{user.name}",
+                    "content": f"<p><span>{note.content}</span></p>",
+                    "source": {
+                        "content": note.content,
+                        "mediaType": "text/x.misskeymarkdown"
+                    },
+                    "published": note.created_at.isoformat(),
+                    "to": [
+                        "https://www.w3.org/ns/activitystreams#Public"
+                    ],
+                    "cc": [
+                        "https://misskey.io/users/9bmype3osl/followers"
+                    ],
+                    "inReplyTo": None,
+                    "attachment": [],
+                    "sensitive": False,
+                    "tag": []
+                },
+                "to": [
+                    "https://www.w3.org/ns/activitystreams#Public"
+                ]
+            } for note in notes
+        ]
+    }
+
+    return Response(content=json.dumps(data), media_type="application/activity+json")
