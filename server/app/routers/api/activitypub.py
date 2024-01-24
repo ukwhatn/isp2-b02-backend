@@ -62,7 +62,7 @@ async def get(
         "type": "Note",
         "id": f"https://{host}/api/activitypub/notes/{note.id}",
         "content": note.content,
-        "attributedTo": f"https://{host}/api/activitypub/users/{note.actor_id}",
+        "attributedTo": f"https://{host}/actor/{note.actor.name}",
         "published": note.created_at.isoformat(),
     }
     return activitypub_note
