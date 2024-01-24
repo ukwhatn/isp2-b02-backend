@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 # ここを変更
-host = "127.0.0.1:58080"
+host = "b02.isp2.ukwhatn.com"
 
 
 # /api/activitypub/users/{user_name} : get
@@ -60,9 +60,9 @@ async def get(
     activitypub_note = {
         "@context": ["https://www.w3.org/ns/activitystreams"],
         "type": "Note",
-        "id": "https://{host}/api/activitypub/notes/{note.id}",
+        "id": f"https://{host}/api/activitypub/notes/{note.id}",
         "content": note.content,
-        "attributedTo": "https://{host}/api/activitypub/users/{note.actor_id}",
-        "published": note.created_at
+        "attributedTo": f"https://{host}/api/activitypub/users/{note.actor_id}",
+        "published": note.created_at.isoformat(),
     }
     return activitypub_note
